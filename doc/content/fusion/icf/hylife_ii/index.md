@@ -1,6 +1,6 @@
-# Divertor Monoblock During Pulsed Operation
+# Gas dynamics in the HYLIFE-II chamber
 
-*Contact: Nahom Habtemariam (nahom.habtemariam.at.tamu.edu), Pierre-Clement Simon (pierreclement.simon.at.inl.gov), Mauricio Tano Retamales (), Carlo Fiorina ()*
+*Contact: Nahom Habtemariam (nahom.habtemariam.at.tamu.edu), Pierre-Clement Simon (pierreclement.simon.at.inl.gov), Mauricio Tano Retamales (mauricio.TanoRetamales.at.inl.gov), Carlo Fiorina (carlo.fiorina.at.tamu.edu), Susana Reyes (susana.reyes.at.xcimer.net)*
 
 *Model link: [HYLIFE II]()*
 
@@ -45,12 +45,8 @@ The 2D monoblock consisted of three materials:
 
 The mesh was generated using the open-source tool Salome.
 
-### Nomenclature of variables and physical parameters
 
-!style halign=left
-
-
-### Variables and governing equations
+### Governing equations
 
 !style halign=left
 We make use of the compressible formulation of the Navier-Stokes equations in the Navier Stokes module of MOOSE (Euler equations).
@@ -82,11 +78,25 @@ In the input file, the variables are defined as:
 !listing fusion/icf/hylife_ii/problem.i link=false block=Variables
 
 
+The P1 model in MOOSE solves for the radiation intensity $G$:
+
+\begin{equation}\label{eq:P1 equation}
+    \nabla \cdot (\Gamma \nabla G) - k_a G = - 4k_e\sigma_{SB}T^4 
+\end{equation}
+
+Where $k_a$ and $k_e$ are the absorption and emission coefficients ($1/m$) respectively.  The diffusion coefficient $\Gamma$ is defined as $\frac{1}{3k_a + \sigma_{eff}}$, where $\sigma_{eff}$ is the scattering coefficient. 
+
+Radiation transport is coupled to the Euler equation through a source (or sink) term equal to:
+\begin{equation}\label{eq:heat sink}
+    \nabla \cdot \mathbf{q} = - \nabla \cdot (\Gamma \nabla G) = 4k_e\sigma_{SB} T^4 - k_aG
+\end{equation}
+
+
 ### Kernels
 
 !style halign=left
 
-The equations are solved using the HLLC flux scheme (ref). The HLLC kernel is applied to each component of the state vector $\textbf{U}$: [CNSFVMassHLLC](https://mooseframework.inl.gov/source/fvkernels/CNSFVMassHLLC.html), [CNSFVMomentumHLLC](https://mooseframework.inl.gov/source/fvkernels/CNSFVMomentumHLLC.html) and [CNSFVFluidEnergyHLLC](https://mooseframework.inl.gov/source/fvkernels/CNSFVFluidEnergyHLLC.html) for mass, momentum and energy equation. 
+The equations are solved using the HLLC flux scheme [!cite](Toro2009). The HLLC kernel is applied to each component of the state vector $\textbf{U}$: [CNSFVMassHLLC](https://mooseframework.inl.gov/source/fvkernels/CNSFVMassHLLC.html), [CNSFVMomentumHLLC](https://mooseframework.inl.gov/source/fvkernels/CNSFVMomentumHLLC.html) and [CNSFVFluidEnergyHLLC](https://mooseframework.inl.gov/source/fvkernels/CNSFVFluidEnergyHLLC.html) for mass, momentum and energy equation. 
 
 The P-1 model is solved using the diffusion kernel [FVDiffusion](https://mooseframework.inl.gov/source/fvkernels/FVDiffusion.html) and the heat sink/source term [FVThermalRadiationSourceSink](https://mooseframework.inl.gov/source/fvkernels/FVThermalRadiationSourceSink.html).
 
@@ -116,11 +126,11 @@ The simulation starts as the gas rebounds back from the center of the chamber. T
 
 !media media/fusion/icf/hylife_ii/ICs.png
   id=fig:tritium_temperature_history
-  caption=Initial conditions of the gas at $60 \mu s$ after liquid wall ablation [!cite](glenn) [!cite](tsunami).
+  caption=Initial conditions of the gas at $60 \mu s$ after liquid wall ablation [!cite](Glenn1980) [!cite](Liu1992).
   style=display:block;margin-left:auto;margin-right:auto;width:60%
 
 
-!listing fusion/icf/hylife_ii/initial.i link=false block=BCs
+!listing fusion/icf/hylife_ii/initial.i link=false block=Functions
 
 
 ## Results
