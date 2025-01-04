@@ -542,6 +542,27 @@ Stefano Terlizzi and Vincent Labouré, "Asymptotic hydrogen redistribution analy
 }
 ```
 
+
+### Inertial confinement fusion
+
+- HYLIFE chamber gas dynamics
+
+```
+@article{ifeMOOSE,
+   author = {Nahom Habtemariam and Pierre-Clément A. Simon and Mauricio Tano Relamales and Brianna Rivera and Guillaume Giudicelli and Susana Reyes and Carlo Fiorina},
+   doi = {xxx},
+   issn = {xx},
+   issue = {xxx},
+   journal = {Fusion Engineering and Design},
+   pages = {},
+   publisher = {},
+   title = {Assessing common assumptions of thick-wall chamber dynamics in inertial fusion systems using MOOSE},
+   volume = {xxx},
+   url = {},
+   year = {2025},
+}
+```
+
 ## Software / codes
 
 The references for various features of MOOSE may be found on this
